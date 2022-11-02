@@ -5,7 +5,7 @@ BOT_NAME = 'tasascrapy'
 SPIDER_MODULES = ['tasascrapy.spiders']
 NEWSPIDER_MODULE = 'tasascrapy.spiders'
 
-
+# playwright
 DOWNLOAD_HANDLERS = {
     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
@@ -18,22 +18,6 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
-
-ITEM_PIPELINES = {
-  "tasascrapy.pipelines.MongoDBPipeline": 300
-}
-
-# Global settings:
-LOG_LEVEL = "INFO"
-LOG_FORMAT = "%(asctime)s : %(levelname)s : %(message)s"
-LOG_FILE = "/tmp/scrapy.log"
-
-# MONGODB_SERVER = "localhost"
-# MONGODB_PORT = 27017
-MONGO_URI = "mongodb://adminuser:abc123@localhost:27017"
-MONGO_COLL_RATES = "rate"
-MONGODB_DATABASE = "testing"
-# MONGODB_COLLECTION = "rate"
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
