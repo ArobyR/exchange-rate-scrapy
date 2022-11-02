@@ -45,7 +45,7 @@ class TasaPopular(scrapy.Spider):
     custom_settings = {
         'FEED_URI': 'tasas.csv',
         'FEED_FORMAT': 'csv',
-        'ROBOTSTXT_OBEY': False,
+        'ROBOTSTXT_OBEY': True,
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
 
@@ -110,7 +110,7 @@ class TasaBancoBhd(scrapy.Spider):
     custom_settings = {
         'FEED_URI': 'tasas.csv',
         'FEED_FORMAT': 'csv',
-        'ROBOTSTXT_OBEY': False,
+        'ROBOTSTXT_OBEY': True,
         'FEED_EXPORT_ENCODING': 'utf-8',
     }
 
