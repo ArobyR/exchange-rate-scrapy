@@ -13,7 +13,7 @@ class TasaBanreserva(scrapy.Spider):
     name = 'tasa-banreserva'
 
     custom_settings = {
-        'FEED_URI': 'tasas.csv',
+        'FEED_URI': 'rate.csv',
         'FEED_FORMAT': 'csv',
         'ROBOTSTXT_OBEY': True,
         'FEED_EXPORT_ENCODING': 'utf-8',
@@ -24,26 +24,27 @@ class TasaBanreserva(scrapy.Spider):
                              meta={'playwright': True})
 
     def parse(self, response):
-        tasa = response.css('td.tasacambio-ventaUS::text').get()
+        rate = response.css('td.tasacambio-ventaUS::text').get()
 
         rate = RateItem()
         rate['acronym'] = 'BRD'
-        rate['rate_exchange'] = tasa
+        rate['rate_exchange'] = rate
         rate['day'] = datetime.date.today()
         
-        yield rate
+        # if you want to save in a database. 
+        # yield rate
         
-        # yield {
-        #     'tasa': tasa,
-        #     'dia': datetime.date.today()
-        # }
+        yield {
+            'rate_exchange': rate,
+            'day': datetime.date.today()
+        }
 
 
 class TasaPopular(scrapy.Spider):
     name = 'tasa-popular'
 
     custom_settings = {
-        'FEED_URI': 'tasas.csv',
+        'FEED_URI': 'rate.csv',
         'FEED_FORMAT': 'csv',
         'ROBOTSTXT_OBEY': True,
         'FEED_EXPORT_ENCODING': 'utf-8',
@@ -92,12 +93,12 @@ class TasaPopular(scrapy.Spider):
             rate['rate_exchange'] = tasa
             rate['day'] = datetime.date.today()
             
-            yield rate
+            # yield rate
             
-            # yield {
-            #     'tasa': tasa,
-            #     'dia': datetime.date.today()
-            # }
+            yield {
+                'rate_exchange': tasa,
+                'day': datetime.date.today()
+            }
 
         self.driver.close()
 
@@ -108,7 +109,7 @@ class TasaBancoBhd(scrapy.Spider):
     allowed_domains = ['www.bhdleon.com.do']
 
     custom_settings = {
-        'FEED_URI': 'tasas.csv',
+        'FEED_URI': 'rate.csv',
         'FEED_FORMAT': 'csv',
         'ROBOTSTXT_OBEY': True,
         'FEED_EXPORT_ENCODING': 'utf-8',
@@ -150,12 +151,12 @@ class TasaBancoBhd(scrapy.Spider):
             rate['rate_exchange'] = tasa_formatted
             rate['day'] = datetime.date.today()
             
-            yield rate
+            # yield rate
             
-            # yield {
-            #     'tasa': tasa_formatted,
-            #     'dia': datetime.date.today()
-            # }
+            yield {
+                'rate_exchange': tasa_formatted,
+                'day': datetime.date.today()
+            }
 
         self.driver.close()
 
@@ -164,7 +165,7 @@ class TasaBancoCentral(scrapy.Spider):
     name = 'tasa-bancocentral'
 
     custom_settings = {
-        'FEED_URI': 'tasas.csv',
+        'FEED_URI': 'rate.csv',
         'FEED_FORMAT': 'csv',
         'ROBOTSTXT_OBEY': True,
         'FEED_EXPORT_ENCODING': 'utf-8',
@@ -175,22 +176,23 @@ class TasaBancoCentral(scrapy.Spider):
                              meta={'playwright': True})
 
     def parse(self, response):
-        tasa = response.xpath(
+        rate = response.xpath(
             '//html/body/div[4]/row/div[2]/div/div/div/div[3]/div[4]/div/table[1]/tbody/tr/td[2]/h5/text()'
         ).get()
 
-        str(tasa)
-        tasa_formatted = tasa.replace(' ', '').replace('\n', '')
-        float(tasa_formatted)
+        str(rate)
+        rate_formatted = rate.replace(' ', '').replace('\n', '')
+        float(rate_formatted)
 
         rate = RateItem()
         rate['acronym'] = 'BCD'
-        rate['rate_exchange'] = tasa_formatted
+        rate['rate_exchange'] = rate_formatted
         rate['day'] = datetime.date.today()
         
-        yield rate
+        # yield rate
+        print(rate_formatted)
         
-        # yield {
-        #     'tasa': tasa_formatted,
-        #     'dia': datetime.date.today()
-        # }
+        yield {
+            'rate_exchange': rate_formatted,
+            'day': datetime.date.today()
+        }
