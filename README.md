@@ -38,10 +38,11 @@ You can run with the custom configuration:
 ```bash
 scrapy crawl <spider_name>
 ```
-or with params for save in .json, for example:
+with params for save in .json, for example:
 ```bash
 scrapy crawl <spider_name> -o output.json
 ```
+or create your own custom settings.
 
 ## Notes
 1. This scrapy scrypt respect the ROBOTSTXT_OBEY (ROBOTSTXT_OBEY = True).
