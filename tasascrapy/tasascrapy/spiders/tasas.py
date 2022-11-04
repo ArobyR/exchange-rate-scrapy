@@ -63,11 +63,11 @@ class TasaPopular(scrapy.Spider):
         self.driver.implicitly_wait(30)
 
         try:
-            close_window = self.driver.find_element(
-                By.XPATH, '//span[@class="close_modal_banner BPD-icon2-nav-15 pull-right white_text"]'
-            )
+            # close_window = self.driver.find_element(
+            #     By.XPATH, '//span[@class="close_modal_banner BPD-icon2-nav-15 pull-right white_text"]'
+            # )
 
-            close_window.click()
+            # close_window.click()
 
             tasa_btn = self.driver.find_element(
                 By.XPATH, '//span[@class="BPD-icon2-pro-35"]')
