@@ -46,4 +46,4 @@ or create your own custom settings.
 
 ## Notes / Disclaimer
 1. This scrapy scrypt respect the ROBOTSTXT_OBEY (ROBOTSTXT_OBEY = True).
-2. The repo need some updates, for example for a better env and performace, you can delete selenium and just use playwright. 
+2. The repo need some updates, example: for a better env and performace you can delete selenium and just use playwright. 
