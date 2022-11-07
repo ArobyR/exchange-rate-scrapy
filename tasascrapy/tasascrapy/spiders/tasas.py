@@ -1,12 +1,13 @@
+from tasascrapy.items import RateItem
+
 import datetime
 import scrapy
-from scrapy_playwright.page import PageCoroutine
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import pyperclip
 
-from tasascrapy.items import RateItem
+from playwright.sync_api import sync_playwright
 
 
 class TasaBanreserva(scrapy.Spider):
@@ -30,10 +31,10 @@ class TasaBanreserva(scrapy.Spider):
         rate['acronym'] = 'BRD'
         rate['rate_exchange'] = rate
         rate['day'] = datetime.date.today()
-        
-        # if you want to save in a database. 
+
+        # if you want to save in a database.
         # yield rate
-        
+
         yield {
             'rate_exchange': rate,
             'day': datetime.date.today()
@@ -92,15 +93,57 @@ class TasaPopular(scrapy.Spider):
             rate['acronym'] = 'BPD'
             rate['rate_exchange'] = tasa
             rate['day'] = datetime.date.today()
-            
+
             # yield rate
-            
+
             yield {
                 'rate_exchange': tasa,
                 'day': datetime.date.today()
             }
 
         self.driver.close()
+
+
+class PopularRate(scrapy.Spider):
+    ''' This option is better. '''
+
+    name = 'popular-no-selenium'
+
+    def __init__(self) -> None:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=False, slow_mo=99)
+            page = browser.new_page()
+            page.goto('https://popularenlinea.com/personas/Paginas/Home.aspx')
+
+            # or use page.locator('attrs')
+            is_element_exists = page.locator(
+                'span.close_modal_banner BPD-icon2-nav-15 pull-right white_text'
+            )
+
+            if is_element_exists:
+                page.click('span.close_modal_banner')
+
+            page.click('span.BPD-icon2-pro-35')
+
+            page.click('input#venta_peso_dolar_desktop')
+
+            page.keyboard.press('Control+A')
+            page.keyboard.press('Control+C')
+            browser.close()
+
+    def start_requests(self):
+        yield scrapy.Request(
+            'https://popularenlinea.com/personas/Paginas/Home.aspx',
+            meta={'playwright': True}
+        )
+
+    def parse(self, response):
+        rate_exchange = pyperclip.paste()
+
+        yield {
+            'rate_exchange': rate_exchange,
+            'day': datetime.date.today()
+        }
 
 
 class TasaBancoBhd(scrapy.Spider):
@@ -150,9 +193,9 @@ class TasaBancoBhd(scrapy.Spider):
             rate['acronym'] = 'BHD'
             rate['rate_exchange'] = tasa_formatted
             rate['day'] = datetime.date.today()
-            
+
             # yield rate
-            
+
             yield {
                 'rate_exchange': tasa_formatted,
                 'day': datetime.date.today()
@@ -188,10 +231,10 @@ class TasaBancoCentral(scrapy.Spider):
         rate['acronym'] = 'BCD'
         rate['rate_exchange'] = rate_formatted
         rate['day'] = datetime.date.today()
-        
+
         # yield rate
         print(rate_formatted)
-        
+
         yield {
             'rate_exchange': rate_formatted,
             'day': datetime.date.today()
