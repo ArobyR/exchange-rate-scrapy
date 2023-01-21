@@ -1,9 +1,9 @@
 # Settings 
 
-BOT_NAME = 'tasascrapy'
+BOT_NAME = 'ratescrapy'
 
-SPIDER_MODULES = ['tasascrapy.spiders']
-NEWSPIDER_MODULE = 'tasascrapy.spiders'
+SPIDER_MODULES = ['ratescrapy.spiders']
+NEWSPIDER_MODULE = 'ratescrapy.spiders'
 
 # playwright
 DOWNLOAD_HANDLERS = {

@@ -1,4 +1,4 @@
-from tasascrapy.items import RateItem
+from ratescrapy.items import RateItem
 
 import datetime
 import scrapy
@@ -10,8 +10,8 @@ import pyperclip
 from playwright.sync_api import sync_playwright
 
 
-class TasaBanreserva(scrapy.Spider):
-    name = 'tasa-banreserva'
+class BanreservaRate(scrapy.Spider):
+    name = 'banreserva.rate'
 
     custom_settings = {
         'FEED_URI': 'rate.csv',
@@ -41,8 +41,8 @@ class TasaBanreserva(scrapy.Spider):
         }
 
 
-class TasaPopular(scrapy.Spider):
-    name = 'tasa-popular'
+class PopularRate(scrapy.Spider):
+    name = 'popular.rate'
 
     custom_settings = {
         'FEED_URI': 'rate.csv',
@@ -70,20 +70,21 @@ class TasaPopular(scrapy.Spider):
 
             # close_window.click()
 
-            tasa_btn = self.driver.find_element(
+            rate_btn = self.driver.find_element(
                 By.XPATH, '//span[@class="BPD-icon2-pro-35"]')
 
-            tasa_btn.click()
+            rate_btn.click()
 
+            # click into the input, select all and copy the rate.
             input_with_dollars = self.driver.find_element(
                 By.XPATH, '//input[@id="venta_peso_dolar_desktop"]')
             input_with_dollars.click()
             input_with_dollars.send_keys(Keys.CONTROL, "a")
             input_with_dollars.send_keys(Keys.CONTROL, "c")
 
-            tasa = pyperclip.paste()
+            rate = pyperclip.paste() # it's already a float
 
-            print(f'Tasa: {tasa}')
+            print(f'Tasa: {rate}')
         except Exception as err:
             print(err)
             print('We have an error. Send an email')
@@ -91,13 +92,13 @@ class TasaPopular(scrapy.Spider):
         else:
             rate = RateItem()
             rate['acronym'] = 'BPD'
-            rate['rate_exchange'] = tasa
+            rate['rate_exchange'] = rate
             rate['day'] = datetime.date.today()
 
             # yield rate
 
             yield {
-                'rate_exchange': tasa,
+                'rate_exchange': rate,
                 'day': datetime.date.today()
             }
 
@@ -138,6 +139,7 @@ class PopularRate(scrapy.Spider):
         )
 
     def parse(self, response):
+        # get the rate from the clickboard
         rate_exchange = pyperclip.paste()
 
         yield {
@@ -146,8 +148,8 @@ class PopularRate(scrapy.Spider):
         }
 
 
-class TasaBancoBhd(scrapy.Spider):
-    name = 'tasa-bancobhd'
+class BankBhdRate(scrapy.Spider):
+    name = 'bankbhd.rate'
 
     allowed_domains = ['www.bhdleon.com.do']
 
@@ -176,36 +178,36 @@ class TasaBancoBhd(scrapy.Spider):
                                                     )
             exchange_btn.click()
 
-            tasa = response.xpath(
+            rate_text = response.xpath(
                 '//div[@id="TasasDeCambio"]/table/tbody/tr[2]/td[3]/text()'
             ).get()
 
-            str(tasa)
-            tasa_formatted = tasa.replace(' DOP', '')
-            float(tasa_formatted)
+            rate_formatted = rate_text.replace(' DOP', '')
 
         except Exception as err:
             print(err)
             print('We have an error. Send an email')
             raise
         else:
+            float(rate_formatted) # str to float
+            
             rate = RateItem()
             rate['acronym'] = 'BHD'
-            rate['rate_exchange'] = tasa_formatted
+            rate['rate_exchange'] = rate_formatted
             rate['day'] = datetime.date.today()
 
             # yield rate
 
             yield {
-                'rate_exchange': tasa_formatted,
+                'rate_exchange': rate_formatted,
                 'day': datetime.date.today()
             }
 
         self.driver.close()
 
 
-class TasaBancoCentral(scrapy.Spider):
-    name = 'tasa-bancocentral'
+class CentralBankRate(scrapy.Spider):
+    name = 'centralbank.rate'
 
     custom_settings = {
         'FEED_URI': 'rate.csv',
