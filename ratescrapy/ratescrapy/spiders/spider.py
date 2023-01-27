@@ -82,7 +82,7 @@ class PopularRate(scrapy.Spider):
             input_with_dollars.send_keys(Keys.CONTROL, "a")
             input_with_dollars.send_keys(Keys.CONTROL, "c")
 
-            rate = pyperclip.paste() # it's already a float
+            rate = pyperclip.paste()  # it's already a float
 
             print(f'Tasa: {rate}')
         except Exception as err:
@@ -105,7 +105,7 @@ class PopularRate(scrapy.Spider):
         self.driver.close()
 
 
-class PopularRate(scrapy.Spider):
+class PopularRateNoSelenium(scrapy.Spider):
     ''' This option is better. '''
 
     name = 'popular-no-selenium'
@@ -189,8 +189,8 @@ class BankBhdRate(scrapy.Spider):
             print('We have an error. Send an email')
             raise
         else:
-            float(rate_formatted) # str to float
-            
+            float(rate_formatted)  # str to float
+
             rate = RateItem()
             rate['acronym'] = 'BHD'
             rate['rate_exchange'] = rate_formatted
