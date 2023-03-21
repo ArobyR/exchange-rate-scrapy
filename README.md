@@ -24,7 +24,7 @@ Download the packages:
 
     pip3 install -r requirements.txt
 
-Move to the project, in my case the name is tasascrapy.
+Move to the project, in my case the name is ratescrapy.
 
 Install the required browsers
 
