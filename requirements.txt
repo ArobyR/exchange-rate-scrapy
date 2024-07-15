@@ -42,7 +42,7 @@ python-slugify==6.1.2
 queuelib==1.6.2
 requests==2.31.0
 requests-file==1.5.1
-Scrapy==2.9.0
+Scrapy==2.11.2
 scrapy-playwright==0.0.21
 selenium==4.4.0
 service-identity==21.1.0
