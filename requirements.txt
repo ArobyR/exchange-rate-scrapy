@@ -11,7 +11,7 @@ filelock==3.7.1
 greenlet==1.1.2
 h11==0.13.0
 hyperlink==21.0.0
-idna==3.3
+idna==3.7
 incremental==21.3.0
 iniconfig==1.1.1
 itemadapter==0.7.0
